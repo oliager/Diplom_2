@@ -1,5 +1,6 @@
 package org.example;
 
+import io.qameta.allure.junit4.DisplayName;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.example.model.LoginUser;
 import org.example.model.Order;
@@ -38,6 +39,7 @@ public class CreateOrderTest extends BaseTest {
     }
 
     @Test
+    @DisplayName("Создание заказа для авторизованного пользователя")
     public void createOrderForAuthorizedUser() {
 
         List<String> ingredientIds = orderSteps.getIngredients().extract().path("data._id");
@@ -52,6 +54,7 @@ public class CreateOrderTest extends BaseTest {
                 .body("success", is(true));
     }
     @Test
+    @DisplayName("Создание заказа для неавторизованного пользователя")
     public void createOrderForUnauthorizedUser() {
 
         List<String> ingredientIds = orderSteps.getIngredients().extract().path("data._id");
@@ -67,6 +70,7 @@ public class CreateOrderTest extends BaseTest {
     }
 
     @Test
+    @DisplayName("Создание заказа без ингредиентов")
     public void createOrderWithoutIngredients() {
 
         Order order = new Order(null, authorization);
@@ -77,11 +81,12 @@ public class CreateOrderTest extends BaseTest {
     }
 
     @Test
-    public void createOrderWithBadIngredientId() {
+    @DisplayName("Создание заказа с неправильным Хэшем ингредиента")
+    public void createOrderWithBadIngredientHash() {
 
-        List<String> listIds = new ArrayList<>();
-        listIds.add(RandomStringUtils.randomAlphabetic(16).toLowerCase());
-        Order order = new Order(listIds, authorization);
+        List<String> listHashes = new ArrayList<>();
+        listHashes.add(RandomStringUtils.randomAlphabetic(16).toLowerCase());
+        Order order = new Order(listHashes, authorization);
 
         orderSteps.createOrder(order)
                 .statusCode(500);

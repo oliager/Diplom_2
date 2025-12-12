@@ -1,5 +1,6 @@
 package org.example;
 
+import io.qameta.allure.junit4.DisplayName;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.example.model.LoginUser;
 import org.example.model.User;
@@ -30,7 +31,8 @@ public class LoginUserTest extends BaseTest {
                 .statusCode(200);
     }
     @Test
-    public void loginExistedUser() {
+    @DisplayName("Авторизация для существующего пользователя")
+    public void loginForExistingUser() {
         LoginUser loginUser = new LoginUser(expectedEmail, password);
 
         usersSteps.login(loginUser)
@@ -42,6 +44,7 @@ public class LoginUserTest extends BaseTest {
                 .body("user.name", is(expectedName));
     }
     @Test
+    @DisplayName("Авторизация с неправильным Email")
     public void loginUserWithWrongEmail() {
         LoginUser loginUser = new LoginUser(null, password);
 
@@ -51,6 +54,7 @@ public class LoginUserTest extends BaseTest {
                 .body("message", is("email or password are incorrect"));
     }
     @Test
+    @DisplayName("Авторизация с неправильным паролем")
     public void loginUserWithWrongPassword() {
         LoginUser loginUser = new LoginUser(expectedEmail, null);
 
