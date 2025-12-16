@@ -6,6 +6,7 @@ import org.example.model.LoginUser;
 import org.example.model.User;
 
 import static io.restassured.RestAssured.given;
+import static org.example.config.RestConfig.*;
 
 public class UsersSteps {
 
@@ -14,7 +15,7 @@ public class UsersSteps {
         return given()
                 .body(user)
                 .when()
-                .post("api/auth/register")
+                .post(POST_REGISTER)
                 .then();
 
     }
@@ -24,8 +25,16 @@ public class UsersSteps {
         return given()
                 .body(loginUser)
                 .when()
-                .post("api/auth/login")
+                .post(POST_LOGIN)
                 .then();
 
+    }
+    @Step("Удаляется аккаунт пользователя")
+    public ValidatableResponse delete(String authorization) {
+        return given()
+                .header("Authorization", authorization)
+                .when()
+                .delete(DELETE_USER)
+                .then();
     }
 }
